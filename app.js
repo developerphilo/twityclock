@@ -4,12 +4,39 @@ const Twit = require('twit');
 const config = require('./config');
 
 const T = new Twit(config);
-
-var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+var options = { weekday: 'long', day: 'numeric', year: 'numeric', month: 'long' };
 var today = new Date();
 
-console.log(today.toLocaleDateString("en-US", options));
+const newDate = today.toLocaleDateString("en-US", options);
 
-// T.post('statuses/update', { status: 'hello world!' }, function (err, data, response) {
-//     console.log(data)
-// })
+console.log(newDate)
+
+
+
+tweetIt()
+
+setInterval(tweetIt, 1000 * 60 * 60 * 24);
+
+// tweet
+function tweetIt() {
+    var tweet = {
+        status: `${newDate}`
+    }
+
+    T.post('statuses/update', tweet, tweeted);
+
+
+    // callback  function
+    function tweeted(err, data, response) {
+
+        if (err) {
+            console.log("Something went wrong!")
+
+        } else {
+            console.log('it works tada')
+        }
+
+
+    }
+}
+
